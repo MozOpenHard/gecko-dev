@@ -58,7 +58,7 @@ static const uint32_t FREE_BLOCK_SCAN_LIMIT = 16;
 
 // Try to save power by not resuming paused reads if the stream won't need new
 // data within this time interval in the future
-static const uint32_t CACHE_POWERSAVE_WAKEUP_LOW_THRESHOLD_MS = 10000;
+static const uint32_t CACHE_POWERSAVE_WAKEUP_LOW_THRESHOLD_MS = 30000;
 
 #ifdef DEBUG
 // Turn this on to do very expensive cache state validation
@@ -577,8 +577,18 @@ MediaCache::Init()
   NS_ASSERTION(!mFileCache, "Cache file already open?");
 
   PRFileDesc* fileDesc = nullptr;
-  nsresult rv = NS_OpenAnonymousTemporaryFile(&fileDesc);
-  NS_ENSURE_SUCCESS(rv,rv);
+  nsresult rv;
+
+  nsAutoCString name("/tmp/mozilla-temp-");
+  name.AppendInt(rand());
+
+  fileDesc = PR_Open(name.get(), PR_RDWR | PR_CREATE_FILE, PR_IRWXU);
+  if (fileDesc != 0)
+      PR_Delete(name.get());
+  else {
+      rv = NS_OpenAnonymousTemporaryFile(&fileDesc);
+      NS_ENSURE_SUCCESS(rv,rv);
+  }
 
   mFileCache = new FileBlockCache();
   rv = mFileCache->Open(fileDesc);

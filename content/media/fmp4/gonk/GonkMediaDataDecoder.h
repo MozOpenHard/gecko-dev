@@ -92,6 +92,9 @@ private:
   int64_t mLastStreamOffset;
   // Set it ture when there is no input data
   bool mSignaledEOS;
+
+  //fix gecko do not exit when out of data.
+  bool mDrainComplete;
 };
 
 } // namespace mozilla

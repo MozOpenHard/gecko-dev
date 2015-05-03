@@ -129,9 +129,10 @@ CommandFunc NetworkUtils::sWifiEnableChain[] = {
 
 CommandFunc NetworkUtils::sWifiDisableChain[] = {
   NetworkUtils::clearWifiTetherParms,
+  NetworkUtils::clearAddrs,
+  NetworkUtils::wifiFirmwareReload,
   NetworkUtils::stopSoftAP,
   NetworkUtils::stopAccessPointDriver,
-  NetworkUtils::wifiFirmwareReload,
   NetworkUtils::untetherInterface,
   NetworkUtils::preTetherInterfaceList,
   NetworkUtils::postTetherInterfaceList,
@@ -143,6 +144,7 @@ CommandFunc NetworkUtils::sWifiDisableChain[] = {
 
 CommandFunc NetworkUtils::sWifiFailChain[] = {
   NetworkUtils::clearWifiTetherParms,
+  NetworkUtils::clearAddrs,
   NetworkUtils::stopSoftAP,
   NetworkUtils::setIpForwardingEnabled,
   NetworkUtils::stopTethering
@@ -150,6 +152,7 @@ CommandFunc NetworkUtils::sWifiFailChain[] = {
 
 CommandFunc NetworkUtils::sWifiRetryChain[] = {
   NetworkUtils::clearWifiTetherParms,
+  NetworkUtils::clearAddrs,
   NetworkUtils::stopSoftAP,
   NetworkUtils::stopTethering,
 
@@ -236,6 +239,7 @@ CommandFunc NetworkUtils::sNetworkInterfaceSetAlarmChain[] = {
 };
 
 CommandFunc NetworkUtils::sSetDnsChain[] = {
+  NetworkUtils::flushDefaultInterface,
   NetworkUtils::setDefaultInterface,
   NetworkUtils::setInterfaceDns
 };
@@ -582,6 +586,15 @@ void NetworkUtils::startSoftAP(CommandChain* aChain,
   doCommand(command, aChain, aCallback);
 }
 
+void NetworkUtils::clearAddrs(CommandChain* aChain,
+                              CommandCallback aCallback,
+                              NetworkResultOptions& aResult)
+{
+  char command[MAX_COMMAND_SIZE];
+  snprintf(command, MAX_COMMAND_SIZE - 1, "interface clearaddrs %s", GET_CHAR(mIfname));
+  doCommand(command, aChain, aCallback);
+}
+
 void NetworkUtils::stopSoftAP(CommandChain* aChain,
                               CommandCallback aCallback,
                               NetworkResultOptions& aResult)
@@ -847,6 +860,16 @@ void NetworkUtils::setDefaultInterface(CommandChain* aChain,
 {
   char command[MAX_COMMAND_SIZE];
   snprintf(command, MAX_COMMAND_SIZE - 1, "resolver setdefaultif %s", GET_CHAR(mIfname));
+
+  doCommand(command, aChain, aCallback);
+}
+
+void NetworkUtils::flushDefaultInterface(CommandChain* aChain,
+                                         CommandCallback aCallback,
+                                         NetworkResultOptions& aResult)
+{
+  char command[MAX_COMMAND_SIZE];
+  snprintf(command, MAX_COMMAND_SIZE - 1, "resolver flushdefaultif");
 
   doCommand(command, aChain, aCallback);
 }

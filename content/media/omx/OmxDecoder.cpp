@@ -947,6 +947,7 @@ bool OmxDecoder::ReadAudio(AudioFrame *aFrame, int64_t aSeekTimeUs)
 
 nsresult OmxDecoder::Play()
 {
+#if 0
   if (!mVideoPaused && !mAudioPaused) {
     return NS_OK;
   }
@@ -960,7 +961,7 @@ nsresult OmxDecoder::Play()
     return NS_ERROR_UNEXPECTED;
   }
   mAudioPaused = false;
-
+#endif
   return NS_OK;
 }
 
@@ -980,6 +981,7 @@ void OmxDecoder::Pause()
    * Since there is not power consumption problem in emulator, we will just
    * return when running in emulator to fix timeouts in mochitests.
    */
+#if 0
   if (isInEmulator()) {
     return;
   }
@@ -995,6 +997,7 @@ void OmxDecoder::Pause()
   if (mAudioSource.get() && mAudioSource->pause() == OK) {
     mAudioPaused = true;
   }
+#endif
 }
 
 // Called on ALooper thread.

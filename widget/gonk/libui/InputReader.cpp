@@ -198,6 +198,9 @@ static void synthesizeButtonKeys(InputReaderContext* context, int32_t action,
     synthesizeButtonKey(context, action, when, deviceId, source, policyFlags,
             lastButtonState, currentButtonState,
             AMOTION_EVENT_BUTTON_FORWARD, AKEYCODE_FORWARD);
+    synthesizeButtonKey(context, action, when, deviceId, source, policyFlags,
+            lastButtonState, currentButtonState,
+            AMOTION_EVENT_BUTTON_SECONDARY, AKEYCODE_HOME);
 }
 
 
