@@ -1,0 +1,21 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsISupports.idl"
+
+%{C++
+#define NS_GPIOSERVICE_CID { 0x80d6f9cc, 0xf16d, 0x40c3, { 0xa5, 0x2e, 0xc4, 0xe6, 0x56, 0xe3, 0x65, 0xb5 } }
+#define GPIOSERVICE_CONTRACTID "@mozilla.org/gpio/gpioservice;1"
+%}
+
+[scriptable, builtinclass, uuid(9a85320a-06d0-48c5-b5ae-5d41fa498469)]
+interface nsIGpioService : nsISupports
+{
+  void export(in uint32_t aPinNo);
+  void unexport(in uint32_t aPinNo);
+  void setDirection(in uint32_t aPinNo, in bool aOut);
+  void getDirection(in uint32_t aPinNo, out bool aOut);
+  void setValue(in uint32_t aPinNo, in uint32_t aValue);
+  void getValue(in uint32_t aPinNo, out uint32_t aValue);
+};

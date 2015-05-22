@@ -3837,6 +3837,7 @@ MOZ_ANDROID_MLS_STUMBLER=
 MOZ_ANDROID_SHARE_OVERLAY=
 ACCESSIBILITY=1
 MOZ_TIME_MANAGER=
+MOZ_GPIO_MANAGER=
 MOZ_PAY=
 MOZ_AUDIO_CHANNEL_MANAGER=
 NSS_NO_LIBPKIX=
@@ -7541,6 +7542,14 @@ if test -n "$MOZ_TIME_MANAGER"; then
     AC_DEFINE(MOZ_TIME_MANAGER)
 fi
 AC_SUBST(MOZ_TIME_MANAGER)
+
+dnl ========================================================
+dnl = Enable Support for GPIO Manager API
+dnl ========================================================
+if test -n "$MOZ_GPIO_MANAGER"; then
+    AC_DEFINE(MOZ_GPIO_MANAGER)
+fi
+AC_SUBST(MOZ_GPIO_MANAGER)
 
 dnl ========================================================
 dnl = Enable Camera Interface for B2G (Gonk usually)

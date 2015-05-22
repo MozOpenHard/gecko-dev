@@ -104,6 +104,12 @@ class AudioChannelManager;
 #endif
 } // namespace system
 
+#ifdef MOZ_GPIO_MANAGER
+namespace gpio {
+class GpioManager;
+} // namespace gpio
+#endif
+
 class Navigator MOZ_FINAL : public nsIDOMNavigator
                           , public nsIMozNavigatorNetwork
                           , public nsWrapperCache
@@ -254,6 +260,9 @@ public:
 #ifdef MOZ_AUDIO_CHANNEL_MANAGER
   system::AudioChannelManager* GetMozAudioChannelManager(ErrorResult& aRv);
 #endif // MOZ_AUDIO_CHANNEL_MANAGER
+#ifdef MOZ_GPIO_MANAGER
+  gpio::GpioManager* GetMozGpio(ErrorResult& aRv);
+#endif // MOZ_GPIO_MANAGER
 
   bool SendBeacon(const nsAString& aUrl,
                   const Nullable<ArrayBufferViewOrBlobOrStringOrFormData>& aData,
@@ -344,6 +353,9 @@ private:
 #endif
 #ifdef MOZ_AUDIO_CHANNEL_MANAGER
   nsRefPtr<system::AudioChannelManager> mAudioChannelManager;
+#endif
+#ifdef MOZ_GPIO_MANAGER
+  nsRefPtr<gpio::GpioManager> mGpioManager;
 #endif
   nsRefPtr<nsDOMCameraManager> mCameraManager;
   nsCOMPtr<nsIDOMNavigatorSystemMessages> mMessagesManager;
