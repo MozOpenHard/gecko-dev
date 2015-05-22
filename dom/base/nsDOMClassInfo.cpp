@@ -142,6 +142,9 @@
 #ifdef MOZ_TIME_MANAGER
 #include "TimeManager.h"
 #endif
+#ifdef MOZ_GPIO_MANAGER
+#include "GpioManager.h"
+#endif
 
 using namespace mozilla;
 using namespace mozilla::dom;

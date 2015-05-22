@@ -95,6 +95,7 @@ DIRS += [
     'xml',
     'xslt',
     'resourcestats',
+    'gpio',
 ]
 
 if CONFIG['OS_ARCH'] == 'WINNT':

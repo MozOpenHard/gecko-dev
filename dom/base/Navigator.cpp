@@ -80,6 +80,10 @@
 #include "AudioChannelManager.h"
 #endif
 
+#ifdef MOZ_GPIO_MANAGER
+#include "GpioManager.h"
+#endif
+
 #ifdef MOZ_B2G_FM
 #include "mozilla/dom/FMRadio.h"
 #endif
@@ -188,6 +192,9 @@ NS_IMPL_CYCLE_COLLECTION_TRAVERSE_BEGIN(Navigator)
 #ifdef MOZ_AUDIO_CHANNEL_MANAGER
   NS_IMPL_CYCLE_COLLECTION_TRAVERSE(mAudioChannelManager)
 #endif
+#ifdef MOZ_GPIO_MANAGER
+  NS_IMPL_CYCLE_COLLECTION_TRAVERSE(mGpioManager)
+#endif
   NS_IMPL_CYCLE_COLLECTION_TRAVERSE(mCameraManager)
   NS_IMPL_CYCLE_COLLECTION_TRAVERSE(mMessagesManager)
   NS_IMPL_CYCLE_COLLECTION_TRAVERSE(mDeviceStorageStores)
@@ -290,6 +297,12 @@ Navigator::Invalidate()
 #ifdef MOZ_AUDIO_CHANNEL_MANAGER
   if (mAudioChannelManager) {
     mAudioChannelManager = nullptr;
+  }
+#endif
+
+#ifdef MOZ_GPIO_MANAGER
+  if (mGpioManager) {
+    mGpioManager = nullptr;
   }
 #endif
 
@@ -1945,6 +1958,23 @@ Navigator::GetMozTime(ErrorResult& aRv)
   }
 
   return mTimeManager;
+}
+#endif
+
+#ifdef MOZ_GPIO_MANAGER
+gpio::GpioManager*
+Navigator::GetMozGpio(ErrorResult& aRv)
+{
+  if (!mWindow) {
+    aRv.Throw(NS_ERROR_UNEXPECTED);
+    return nullptr;
+  }
+
+  if (!mGpioManager) {
+    mGpioManager = new gpio::GpioManager(mWindow);
+  }
+
+  return mGpioManager;
 }
 #endif
 
