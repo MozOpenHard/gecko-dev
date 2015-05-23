@@ -3838,6 +3838,7 @@ MOZ_ANDROID_SHARE_OVERLAY=
 ACCESSIBILITY=1
 MOZ_TIME_MANAGER=
 MOZ_GPIO_MANAGER=
+MOZ_I2C_MANAGER=
 MOZ_PAY=
 MOZ_AUDIO_CHANNEL_MANAGER=
 NSS_NO_LIBPKIX=
@@ -7550,6 +7551,14 @@ if test -n "$MOZ_GPIO_MANAGER"; then
     AC_DEFINE(MOZ_GPIO_MANAGER)
 fi
 AC_SUBST(MOZ_GPIO_MANAGER)
+
+dnl ========================================================
+dnl = Enable Support for I2C Manager API
+dnl ========================================================
+if test -n "$MOZ_I2C_MANAGER"; then
+    AC_DEFINE(MOZ_I2C_MANAGER)
+fi
+AC_SUBST(MOZ_I2C_MANAGER)
 
 dnl ========================================================
 dnl = Enable Camera Interface for B2G (Gonk usually)

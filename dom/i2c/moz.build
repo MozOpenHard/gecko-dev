@@ -1,0 +1,27 @@
+# -*- Mode: python; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 40 -*-
+# vim: set filetype=python:
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+XPIDL_SOURCES += [
+    'nsII2cService.idl',
+]
+
+XPIDL_MODULE = 'dom_i2c'
+
+EXPORTS.mozilla.dom.i2c += [
+    'I2cManager.h',
+    'I2cService.h',
+]
+
+UNIFIED_SOURCES += [
+    'I2cManager.cpp',
+    'I2cService.cpp',
+]
+
+FAIL_ON_WARNINGS = True
+
+include('/ipc/chromium/chromium-config.mozbuild')
+
+FINAL_LIBRARY = 'xul'
