@@ -264,6 +264,7 @@ WEBIDL_FILES = [
     'MouseScrollEvent.webidl',
     'MozActivity.webidl',
     'MozGpioManager.webidl',
+    'MozI2cManager.webidl',
     'MozMmsMessage.webidl',
     'MozMobileMessageManager.webidl',
     'MozPowerManager.webidl',

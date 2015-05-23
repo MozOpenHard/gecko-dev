@@ -150,6 +150,7 @@ LOCAL_INCLUDES += [
     '../bluetooth',
     '../events',
     '../gpio',
+    '../i2c',
     '../media',
     '../network',
     '../time',

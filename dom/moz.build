@@ -96,6 +96,7 @@ DIRS += [
     'xslt',
     'resourcestats',
     'gpio',
+    'i2c',
 ]
 
 if CONFIG['OS_ARCH'] == 'WINNT':

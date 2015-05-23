@@ -110,6 +110,12 @@ class GpioManager;
 } // namespace gpio
 #endif
 
+#ifdef MOZ_I2C_MANAGER
+namespace i2c {
+class I2cManager;
+} // namespace i2c
+#endif
+
 class Navigator MOZ_FINAL : public nsIDOMNavigator
                           , public nsIMozNavigatorNetwork
                           , public nsWrapperCache
@@ -263,6 +269,9 @@ public:
 #ifdef MOZ_GPIO_MANAGER
   gpio::GpioManager* GetMozGpio(ErrorResult& aRv);
 #endif // MOZ_GPIO_MANAGER
+#ifdef MOZ_I2C_MANAGER
+  i2c::I2cManager* GetMozI2c(ErrorResult& aRv);
+#endif // MOZ_I2C_MANAGER
 
   bool SendBeacon(const nsAString& aUrl,
                   const Nullable<ArrayBufferViewOrBlobOrStringOrFormData>& aData,
@@ -356,6 +365,9 @@ private:
 #endif
 #ifdef MOZ_GPIO_MANAGER
   nsRefPtr<gpio::GpioManager> mGpioManager;
+#endif
+#ifdef MOZ_I2C_MANAGER
+  nsRefPtr<i2c::I2cManager> mI2cManager;
 #endif
   nsRefPtr<nsDOMCameraManager> mCameraManager;
   nsCOMPtr<nsIDOMNavigatorSystemMessages> mMessagesManager;
