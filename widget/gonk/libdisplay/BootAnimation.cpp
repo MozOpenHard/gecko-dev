@@ -417,6 +417,7 @@ AnimationThread(void *)
 
     GonkDisplay *display = GetGonkDisplay();
     int format = display->surfaceformat;
+    format = HAL_PIXEL_FORMAT_BGRA_8888;
 
     hw_module_t const *module;
     if (hw_get_module(GRALLOC_HARDWARE_MODULE_ID, &module)) {

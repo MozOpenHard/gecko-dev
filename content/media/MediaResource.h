@@ -234,6 +234,9 @@ public:
   // the main thread.
   NS_DECL_THREADSAFE_ISUPPORTS
 
+  // Add for http live streaming.
+  virtual nsIURI * GetURI() { return nullptr; };
+
   // The following can be called on the main thread only:
   // Get the URI
   virtual nsIURI* URI() const { return nullptr; }
@@ -431,6 +434,7 @@ private:
 class BaseMediaResource : public MediaResource {
 public:
   virtual nsIURI* URI() const { return mURI; }
+  virtual nsIURI * GetURI() { return mURL; }
   virtual void MoveLoadsToBackground();
 
   virtual size_t SizeOfExcludingThis(
@@ -462,7 +466,8 @@ protected:
     mChannel(aChannel),
     mURI(aURI),
     mContentType(aContentType),
-    mLoadInBackground(false)
+    mLoadInBackground(false),
+    mURL(aURI)
   {
     MOZ_COUNT_CTOR(BaseMediaResource);
     NS_ASSERTION(!mContentType.IsEmpty(), "Must know content type");
@@ -507,6 +512,8 @@ protected:
   // True if MoveLoadsToBackground() has been called, i.e. the load event
   // has been fired, and all channel loads will be in the background.
   bool mLoadInBackground;
+
+  nsIURI* mURL;
 };
 
 /**

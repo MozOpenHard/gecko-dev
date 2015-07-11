@@ -302,6 +302,7 @@ private:
   static void createUpStream(PARAMS);
   static void startSoftAP(PARAMS);
   static void stopSoftAP(PARAMS);
+  static void clearAddrs(PARAMS);
   static void clearWifiTetherParms(PARAMS);
   static void enableAlarm(PARAMS);
   static void disableAlarm(PARAMS);
@@ -321,6 +322,7 @@ private:
   static void enableNat(PARAMS);
   static void disableNat(PARAMS);
   static void setDefaultInterface(PARAMS);
+  static void flushDefaultInterface(PARAMS);
   static void setInterfaceDns(PARAMS);
   static void wifiTetheringSuccess(PARAMS);
   static void usbTetheringSuccess(PARAMS);

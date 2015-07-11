@@ -42,6 +42,17 @@ public:
     return kWantsPrefetching;
   }
 
+  virtual const char *getPath() {
+    nsIURI* uri = mResource->GetURI();
+    if (! uri) {
+      return "--- uri is null ---";
+    }
+
+    nsCString spec;
+    uri->GetSpec(spec);
+    return spec.get();
+ }
+
   virtual ~MediaStreamSource();
 
 private:

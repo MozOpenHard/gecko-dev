@@ -717,6 +717,8 @@ void MediaDecoder::MetadataLoaded(MediaInfo* aInfo, MetadataTags* aTags)
 
   if (mDuration == -1) {
     SetInfinite(true);
+  } else {
+    SetInfinite(false);
   }
 
   mInfo = aInfo;

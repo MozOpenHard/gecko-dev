@@ -397,7 +397,7 @@ pref("media.webvtt.regions.enabled", false);
 pref("media.track.enabled", false);
 
 // Whether to enable MediaSource support
-pref("media.mediasource.enabled", false);
+pref("media.mediasource.enabled", true);
 
 #ifdef MOZ_WEBSPEECH
 pref("media.webspeech.recognition.enable", false);
