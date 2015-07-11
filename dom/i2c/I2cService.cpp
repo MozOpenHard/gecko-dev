@@ -93,11 +93,11 @@ I2cService::i2c_smbus_write_word_data(int file, uint8_t command, uint16_t value)
 }
 
 NS_IMETHODIMP
-I2cService::Open(uint8_t aDeviceNo, uint8_t aDeviceAddress) {
+I2cService::Open(uint8_t aDeviceNo) {
   int fd;
   char deviceName[16];
 
-  LOG("i2c Open(%d,%d) called\n", aDeviceNo, aDeviceAddress);
+  LOG("i2c Open(%d) called\n", aDeviceNo);
 
   if (map_fd.find(aDeviceNo) != map_fd.end()) {
     LOG("I2C device%d already opened\n", aDeviceNo);
@@ -111,12 +111,26 @@ I2cService::Open(uint8_t aDeviceNo, uint8_t aDeviceAddress) {
     return NS_ERROR_FAILURE;
   }
 
-  if (ioctl(fd, I2C_SLAVE, aDeviceAddress) < 0) {
-    LOG("%s: ioctl(I2C_SLAVE) failed: %s(%d)\n", __func__, strerror(errno), errno);
-    return NS_ERROR_FAILURE;
+  map_fd[aDeviceNo] = fd;
+
+  return NS_OK;
+}
+
+NS_IMETHODIMP
+I2cService::SetDeviceAddress(uint8_t aDeviceNo, uint8_t aDeviceAddress) {
+
+  LOG("i2c SetDeviceAddress(%d, %d) called\n", aDeviceNo, aDeviceAddress);
+
+  if (map_fd.find(aDeviceNo) == map_fd.end()) {
+    LOG("I2C device%d is not opened yet\n", aDeviceNo);
+    return NS_ERROR_NOT_AVAILABLE;
   }
 
-  map_fd[aDeviceNo] = fd;
+  if (ioctl(map_fd[aDeviceNo], I2C_SLAVE, aDeviceAddress) < 0) {
+    LOG("%s: ioctl(I2C_SLAVE) for %02x failed: %s(%d)\n", __func__,
+        aDeviceAddress, strerror(errno), errno);
+    return NS_ERROR_FAILURE;
+  }
 
   return NS_OK;
 }

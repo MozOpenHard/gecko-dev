@@ -29,11 +29,20 @@ I2cManager::WrapObject(JSContext* aCx)
 }
 
 void
-I2cManager::Open(uint8_t aDeviceNo, uint8_t aDeviceAddress)
+I2cManager::Open(uint8_t aDeviceNo)
 {
   nsCOMPtr<nsII2cService> i2cService = do_GetService(I2CSERVICE_CONTRACTID);
   if (i2cService) {
-    i2cService->Open(aDeviceNo, aDeviceAddress);
+    i2cService->Open(aDeviceNo);
+  }
+}
+
+void
+I2cManager::SetDeviceAddress(uint8_t aDeviceNo, uint8_t aDeviceAddress)
+{
+  nsCOMPtr<nsII2cService> i2cService = do_GetService(I2CSERVICE_CONTRACTID);
+  if (i2cService) {
+    i2cService->SetDeviceAddress(aDeviceNo, aDeviceAddress);
   }
 }
 
