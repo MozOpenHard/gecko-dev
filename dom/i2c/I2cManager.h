@@ -45,7 +45,8 @@ public:
   }
   JSObject* WrapObject(JSContext* aCx);
 
-  void Open(uint8_t aDeviceNo, uint8_t aDeviceAddress);
+  void Open(uint8_t aDeviceNo);
+  void SetDeviceAddress(uint8_t aDeviceNo, uint8_t aDeviceAddress);
   void Write(uint8_t aDeviceNo, uint8_t aCommand, uint16_t aValue, bool aIsOctet);
   uint16_t Read(uint8_t aDeviceNo, uint8_t aCommand, bool aIsOctet);
 

@@ -5,7 +5,8 @@
 
 [Func="mozilla::dom::i2c::I2cManager::PrefEnabled"]
 interface MozI2cManager {
-  void open(octet deviceNo, octet deviceAddress);
+  void open(octet deviceNo);
+  void setDeviceAddress(octet deviceNo, octet deviceAddress);
   void write(octet deviceNo, octet command, unsigned short value, boolean isOctet);
   unsigned short read(octet deviceNo, octet command, boolean isOctet);
 };
