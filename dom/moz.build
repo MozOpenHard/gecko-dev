@@ -111,6 +111,8 @@ DIRS += [
     'xslt',
     'xul',
     'resourcestats',
+    'gpio',
+    'i2c',
     'manifest',
     'vr',
     'newapps',

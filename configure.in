@@ -3763,6 +3763,8 @@ MOZ_INSTALL_TRACKING=
 MOZ_SWITCHBOARD=
 ACCESSIBILITY=1
 MOZ_TIME_MANAGER=
+MOZ_GPIO_MANAGER=
+MOZ_I2C_MANAGER=
 MOZ_SIMPLEPUSH=
 MOZ_PAY=
 MOZ_AUDIO_CHANNEL_MANAGER=
@@ -7642,6 +7644,22 @@ if test -n "$MOZ_TIME_MANAGER"; then
     AC_DEFINE(MOZ_TIME_MANAGER)
 fi
 AC_SUBST(MOZ_TIME_MANAGER)
+
+dnl ========================================================
+dnl = Enable Support for GPIO Manager API
+dnl ========================================================
+if test -n "$MOZ_GPIO_MANAGER"; then
+    AC_DEFINE(MOZ_GPIO_MANAGER)
+fi
+AC_SUBST(MOZ_GPIO_MANAGER)
+
+dnl ========================================================
+dnl = Enable Support for I2C Manager API
+dnl ========================================================
+if test -n "$MOZ_I2C_MANAGER"; then
+    AC_DEFINE(MOZ_I2C_MANAGER)
+fi
+AC_SUBST(MOZ_I2C_MANAGER)
 
 dnl ========================================================
 dnl = Enable Camera Interface for B2G (Gonk usually)

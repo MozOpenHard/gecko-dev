@@ -787,14 +787,6 @@ DOMInterfaces = {
     'nativeType': 'mozilla::dom::CellBroadcast',
 },
 
-'MozGpioManager': {
-    'nativeType': 'mozilla::dom::gpio::GpioManager',
-},
-
-'MozI2cManager': {
-    'nativeType': 'mozilla::dom::i2c::I2cManager',
-},
-
 'MozCellBroadcastEtwsInfo': {
     'nativeType': 'mozilla::dom::CellBroadcastEtwsInfo',
     'headerFile': 'CellBroadcastMessage.h'

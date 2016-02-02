@@ -314,8 +314,6 @@ WEBIDL_FILES = [
     'MozActivity.webidl',
     'MozCellBroadcast.webidl',
     'MozCellBroadcastMessage.webidl',
-    'MozGpioManager.webidl',
-    'MozI2cManager.webidl',
     'MozIcc.webidl',
     'MozIccInfo.webidl',
     'MozIccManager.webidl',

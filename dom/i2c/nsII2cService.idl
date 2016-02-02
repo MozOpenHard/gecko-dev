@@ -1,0 +1,19 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+#include "nsISupports.idl"
+
+%{C++
+#define NS_I2CSERVICE_CID { 0x80d6f9cc, 0xf16d, 0x40c3, { 0xa5, 0x2e, 0xc4, 0xe6, 0x56, 0xe3, 0x65, 0xb6 } }
+#define I2CSERVICE_CONTRACTID "@mozilla.org/i2c/i2cservice;1"
+%}
+
+[scriptable, builtinclass, uuid(a72de62b-7bdc-4ed5-be5b-125e3ba184a8)]
+interface nsII2cService : nsISupports
+{
+  void open(in uint8_t aDeviceNo);
+  void setDeviceAddress(in uint8_t aDeviceNo, in uint8_t aDeviceAddress);
+  void write(in uint8_t aDeviceNo, in uint8_t aCommand, in uint16_t aValue, in bool aIsOctet);
+  void read(in uint8_t aDeviceNo, in uint8_t aCommand, in bool aIsOctet, out uint16_t aValue);
+};
