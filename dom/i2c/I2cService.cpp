@@ -20,15 +20,29 @@
 #define LOG(args...)
 #endif
 
+#define I2C_REQUEST 0x0720
+#define I2C_SLAVE 0x0703
+#define I2C_READ 1
+#define I2C_WRITE 0
+#define I2C_BYTE 2
+#define I2C_WORD 3
+
 namespace mozilla {
 namespace dom {
 namespace i2c {
 
+struct IoctlData {
+  uint8_t readWrite;
+  uint8_t command;
+  uint32_t valueSize;
+  I2cValue* value;
+};
+
 NS_IMPL_ISUPPORTS(I2cService, nsII2cService)
 
-/* static */ StaticRefPtr<I2cService> I2cService::sSingleton;
+StaticRefPtr<I2cService> I2cService::sSingleton;
 
-/* static */ already_AddRefed<I2cService>
+already_AddRefed<I2cService>
 I2cService::GetInstance()
 {
   if (!sSingleton) {
@@ -40,56 +54,51 @@ I2cService::GetInstance()
 }
 
 int32_t
-I2cService::i2c_smbus_access(int file, char read_write, uint8_t command, 
-                             int size, union i2c_smbus_data *data)
+I2cService::Execute(int aFile, char aReadWrite, uint8_t aCommand, 
+                             int aValueSize, union I2cValue* aValue)
 {
-	struct i2c_smbus_ioctl_data args;
-
-	args.read_write = read_write;
-	args.command = command;
-	args.size = size;
-	args.data = data;
-	return ioctl(file,I2C_SMBUS,&args);
+  struct IoctlData ioctlData;
+  ioctlData.readWrite = aReadWrite;
+  ioctlData.command = aCommand;
+  ioctlData.valueSize = aValueSize;
+  ioctlData.value = aValue;
+  return ioctl(aFile, I2C_REQUEST, &ioctlData);
 }
 
 int32_t
-I2cService::i2c_smbus_read_byte_data(int file, uint8_t command)
+I2cService::ReadByte(int aFile, uint8_t aCommand)
 {
-	union i2c_smbus_data data;
-	if (i2c_smbus_access(file,I2C_SMBUS_READ,command,
-	                     I2C_SMBUS_BYTE_DATA,&data))
-		return -1;
-	else
-		return 0x0FF & data.byte;
+  union I2cValue value;
+  if (Execute(aFile, I2C_READ, aCommand, I2C_BYTE, &value))
+    return -1;
+  else
+    return 0x0FF & value.byte;
 }
 
 int32_t
-I2cService::i2c_smbus_write_byte_data(int file, uint8_t command, uint8_t value)
+I2cService::WriteByte(int aFile, uint8_t aCommand, uint8_t aValue)
 {
-	union i2c_smbus_data data;
-	data.byte = value;
-	return i2c_smbus_access(file,I2C_SMBUS_WRITE,command,
-	                        I2C_SMBUS_BYTE_DATA, &data);
+  union I2cValue value;
+  value.byte = aValue;
+  return Execute(aFile, I2C_WRITE, aCommand, I2C_BYTE, &value);
 }
 
 int32_t
-I2cService::i2c_smbus_read_word_data(int file, uint8_t command)
+I2cService::ReadWord(int aFile, uint8_t aCommand)
 {
-	union i2c_smbus_data data;
-	if (i2c_smbus_access(file,I2C_SMBUS_READ,command,
-	                     I2C_SMBUS_WORD_DATA,&data))
-		return -1;
-	else
-		return 0x0FFFF & data.word;
+  union I2cValue value;
+  if (Execute(aFile, I2C_READ, aCommand, I2C_WORD, &value))
+    return -1;
+  else
+    return 0x0FFFF & value.word;
 }
 
 int32_t
-I2cService::i2c_smbus_write_word_data(int file, uint8_t command, uint16_t value)
+I2cService::WriteWord(int aFile, uint8_t aCommand, uint8_t aValue)
 {
-	union i2c_smbus_data data;
-	data.word = value;
-	return i2c_smbus_access(file,I2C_SMBUS_WRITE,command,
-	                        I2C_SMBUS_WORD_DATA, &data);
+  union I2cValue value;
+  value.word = aValue;
+  return Execute(aFile, I2C_WRITE, aCommand, I2C_WORD, &value);
 }
 
 NS_IMETHODIMP
@@ -99,7 +108,7 @@ I2cService::Open(uint8_t aDeviceNo) {
 
   LOG("i2c Open(%d) called\n", aDeviceNo);
 
-  if (map_fd.find(aDeviceNo) != map_fd.end()) {
+  if (mFdMap.find(aDeviceNo) != mFdMap.end()) {
     LOG("I2C device%d already opened\n", aDeviceNo);
     return NS_OK;
   }
@@ -111,7 +120,7 @@ I2cService::Open(uint8_t aDeviceNo) {
     return NS_ERROR_FAILURE;
   }
 
-  map_fd[aDeviceNo] = fd;
+  mFdMap[aDeviceNo] = fd;
 
   return NS_OK;
 }
@@ -121,12 +130,12 @@ I2cService::SetDeviceAddress(uint8_t aDeviceNo, uint8_t aDeviceAddress) {
 
   LOG("i2c SetDeviceAddress(%d, %d) called\n", aDeviceNo, aDeviceAddress);
 
-  if (map_fd.find(aDeviceNo) == map_fd.end()) {
+  if (mFdMap.find(aDeviceNo) == mFdMap.end()) {
     LOG("I2C device%d is not opened yet\n", aDeviceNo);
     return NS_ERROR_NOT_AVAILABLE;
   }
 
-  if (ioctl(map_fd[aDeviceNo], I2C_SLAVE, aDeviceAddress) < 0) {
+  if (ioctl(mFdMap[aDeviceNo], I2C_SLAVE, aDeviceAddress) < 0) {
     LOG("%s: ioctl(I2C_SLAVE) for %02x failed: %s(%d)\n", __func__,
         aDeviceAddress, strerror(errno), errno);
     return NS_ERROR_FAILURE;
@@ -140,20 +149,20 @@ I2cService::Write(uint8_t aDeviceNo, uint8_t aCommand, uint16_t aValue, bool aIs
 
   LOG("i2c Write(%d,%d,%d) called\n", aDeviceNo, aCommand, aValue);
 
-  if (map_fd.find(aDeviceNo) == map_fd.end()) {
+  if (mFdMap.find(aDeviceNo) == mFdMap.end()) {
     LOG("I2C device%d is not opened yet\n", aDeviceNo);
     return NS_ERROR_NOT_AVAILABLE;
   }
 
   if (aIsOctet) {
-    if (i2c_smbus_write_byte_data(map_fd[aDeviceNo], aCommand, (uint8_t)aValue) < 0) {
-      LOG("%s: i2c_smbus_write_byte_data(%d,%d,%d) failed: %s(%d)\n", __func__,
+    if (WriteByte(mFdMap[aDeviceNo], aCommand, (uint8_t)aValue) < 0) {
+      LOG("%s: WriteByte(%d,%d,%d) failed: %s(%d)\n", __func__,
           aDeviceNo, aCommand, aValue, strerror(errno), errno);
       return NS_ERROR_FAILURE;
     }
   } else {
-    if (i2c_smbus_write_word_data(map_fd[aDeviceNo], aCommand, aValue) < 0) {
-      LOG("%s: i2c_smbus_write_word_data(%d,%d,%d) failed: %s(%d)\n", __func__,
+    if (WriteWord(mFdMap[aDeviceNo], aCommand, aValue) < 0) {
+      LOG("%s: WriteWord(%d,%d,%d) failed: %s(%d)\n", __func__,
           aDeviceNo, aCommand, aValue, strerror(errno), errno);
       return NS_ERROR_FAILURE;
     }
@@ -164,27 +173,26 @@ I2cService::Write(uint8_t aDeviceNo, uint8_t aCommand, uint16_t aValue, bool aIs
 
 NS_IMETHODIMP
 I2cService::Read(uint8_t aDeviceNo, uint8_t aCommand, bool aIsOctet, uint16_t *aValue) {
-  int32_t ret;
 
   LOG("i2c Read(%d,%d,%d) called\n", aDeviceNo, aCommand, aIsOctet);
 
-  if (map_fd.find(aDeviceNo) == map_fd.end()) {
+  if (mFdMap.find(aDeviceNo) == mFdMap.end()) {
     LOG("I2C device%d is not opened yet\n", aDeviceNo);
     return NS_ERROR_NOT_AVAILABLE;
   }
 
-
+  int32_t ret;
   if (aIsOctet) {
-    ret = i2c_smbus_read_byte_data(map_fd[aDeviceNo], aCommand);
+    ret = ReadByte(mFdMap[aDeviceNo], aCommand);
     if (ret < 0) {
-      LOG("%s: i2c_smbus_read_byte_data(%d,%d) failed: %s(%d)\n", __func__,
+      LOG("%s: ReadByte(%d,%d) failed: %s(%d)\n", __func__,
           aDeviceNo, aCommand, strerror(errno), errno);
       return NS_ERROR_FAILURE;
     }
   } else {
-    ret = i2c_smbus_read_word_data(map_fd[aDeviceNo], aCommand);
+    ret = ReadWord(mFdMap[aDeviceNo], aCommand);
     if (ret < 0) {
-      LOG("%s: i2c_smbus_read_word_data(%d,%d) failed: %s(%d)\n", __func__,
+      LOG("%s: ReadWord(%d,%d) failed: %s(%d)\n", __func__,
           aDeviceNo, aCommand, strerror(errno), errno);
       return NS_ERROR_FAILURE;
     }
