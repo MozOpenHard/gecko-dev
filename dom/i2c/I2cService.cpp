@@ -35,7 +35,7 @@ I2cService::GetInstance()
     sSingleton = new I2cService();
     ClearOnShutdown(&sSingleton);
   }
-  nsRefPtr<I2cService> service = sSingleton.get();
+  RefPtr<I2cService> service = sSingleton.get();
   return service.forget();
 }
 

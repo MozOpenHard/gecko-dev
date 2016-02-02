@@ -23,9 +23,9 @@ NS_IMPL_CYCLE_COLLECTING_RELEASE(I2cManager)
 NS_IMPL_CYCLE_COLLECTION_WRAPPERCACHE(I2cManager, mWindow)
 
 JSObject*
-I2cManager::WrapObject(JSContext* aCx)
+I2cManager::WrapObject(JSContext* aCx, JS::Handle<JSObject*> aGivenProto)
 {
-  return MozI2cManagerBinding::Wrap(aCx, this);
+  return MozI2cManagerBinding::Wrap(aCx, this, aGivenProto);
 }
 
 void

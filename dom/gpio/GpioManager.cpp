@@ -23,9 +23,9 @@ NS_IMPL_CYCLE_COLLECTING_RELEASE(GpioManager)
 NS_IMPL_CYCLE_COLLECTION_WRAPPERCACHE(GpioManager, mWindow)
 
 JSObject*
-GpioManager::WrapObject(JSContext* aCx)
+GpioManager::WrapObject(JSContext* aCx, JS::Handle<JSObject*> aGivenProto)
 {
-  return MozGpioManagerBinding::Wrap(aCx, this);
+  return MozGpioManagerBinding::Wrap(aCx, this, aGivenProto);
 }
 
 void

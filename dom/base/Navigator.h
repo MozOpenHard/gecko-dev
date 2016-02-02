@@ -415,10 +415,10 @@ private:
   RefPtr<system::AudioChannelManager> mAudioChannelManager;
 #endif
 #ifdef MOZ_GPIO_MANAGER
-  nsRefPtr<gpio::GpioManager> mGpioManager;
+  RefPtr<gpio::GpioManager> mGpioManager;
 #endif
 #ifdef MOZ_I2C_MANAGER
-  nsRefPtr<i2c::I2cManager> mI2cManager;
+  RefPtr<i2c::I2cManager> mI2cManager;
 #endif
   RefPtr<nsDOMCameraManager> mCameraManager;
   RefPtr<MediaDevices> mMediaDevices;

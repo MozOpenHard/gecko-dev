@@ -36,14 +36,14 @@ public:
   explicit I2cManager(nsPIDOMWindow* aWindow)
     : mWindow(aWindow)
   {
-    SetIsDOMBinding();
   }
 
   nsPIDOMWindow* GetParentObject() const
   {
     return mWindow;
   }
-  JSObject* WrapObject(JSContext* aCx);
+
+  JSObject* WrapObject(JSContext* aCx, JS::Handle<JSObject*> aGivenProto) override;
 
   void Open(uint8_t aDeviceNo);
   void SetDeviceAddress(uint8_t aDeviceNo, uint8_t aDeviceAddress);

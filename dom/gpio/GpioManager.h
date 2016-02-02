@@ -36,14 +36,14 @@ public:
   explicit GpioManager(nsPIDOMWindow* aWindow)
     : mWindow(aWindow)
   {
-    SetIsDOMBinding();
   }
 
   nsPIDOMWindow* GetParentObject() const
   {
     return mWindow;
   }
-  JSObject* WrapObject(JSContext* aCx);
+
+  JSObject* WrapObject(JSContext* aCx, JS::Handle<JSObject*> aGivenProto) override;
 
   void Export(uint32_t aPinNo);
   void Unexport(uint32_t aPinNo);

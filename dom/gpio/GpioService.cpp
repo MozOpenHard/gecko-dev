@@ -33,7 +33,7 @@ GpioService::GetInstance()
     sSingleton = new GpioService();
     ClearOnShutdown(&sSingleton);
   }
-  nsRefPtr<GpioService> service = sSingleton.get();
+  RefPtr<GpioService> service = sSingleton.get();
   return service.forget();
 }
 
@@ -179,7 +179,7 @@ GpioService::SetValue(uint32_t aPinNo, uint32_t aValue) {
 
 NS_IMETHODIMP
 GpioService::GetValue(uint32_t aPinNo, uint32_t *aValue) {
-  FILE *fp;
+  //FILE *fp;
   int fd;
   char buf[16];
   ssize_t ret;
