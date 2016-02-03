@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-[Func="mozilla::dom::gpio::GpioManager::PrefEnabled"]
+[Exposed=Worker, Func="mozilla::dom::gpio::GpioManager::PrefEnabled"]
 interface MozGpioManager {
   void export(unsigned long pinNo);
   void unexport(unsigned long pinNo);

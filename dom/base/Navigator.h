@@ -117,6 +117,12 @@ class GpioManager;
 } // namespace gpio
 #endif
 
+#ifdef MOZ_I2C_MANAGER
+namespace i2c {
+class I2cManager;
+} // namespace i2c
+#endif
+
 class Navigator final : public nsIDOMNavigator
                       , public nsIMozNavigatorNetwork
                       , public nsWrapperCache
@@ -282,9 +288,15 @@ public:
 #ifdef MOZ_AUDIO_CHANNEL_MANAGER
   system::AudioChannelManager* GetMozAudioChannelManager(ErrorResult& aRv);
 #endif // MOZ_AUDIO_CHANNEL_MANAGER
+<<<<<<< HEAD
 #ifdef MOZ_GPIO_MANAGER
   gpio::GpioManager* GetMozGpio(ErrorResult& aRv);
 #endif // MOZ_GPIO_MANAGER
+=======
+#ifdef MOZ_I2C_MANAGER
+  i2c::I2cManager* GetMozI2c(ErrorResult& aRv);
+#endif // MOZ_I2C_MANAGER
+>>>>>>> implements gpio worker
 
   Presentation* GetPresentation(ErrorResult& aRv);
 
@@ -405,8 +417,13 @@ private:
 #ifdef MOZ_AUDIO_CHANNEL_MANAGER
   RefPtr<system::AudioChannelManager> mAudioChannelManager;
 #endif
+<<<<<<< HEAD
 #ifdef MOZ_GPIO_MANAGER
   RefPtr<gpio::GpioManager> mGpioManager;
+=======
+#ifdef MOZ_I2C_MANAGER
+  RefPtr<i2c::I2cManager> mI2cManager;
+>>>>>>> implements gpio worker
 #endif
   RefPtr<nsDOMCameraManager> mCameraManager;
   RefPtr<MediaDevices> mMediaDevices;

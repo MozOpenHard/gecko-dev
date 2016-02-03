@@ -117,8 +117,13 @@
 #ifdef MOZ_TIME_MANAGER
 #include "TimeManager.h"
 #endif
+
 #ifdef MOZ_GPIO_MANAGER
 #include "GpioManager.h"
+#endif
+
+#ifdef MOZ_I2C_MANAGER
+#include "I2cManager.h"
 #endif
 
 using namespace mozilla;

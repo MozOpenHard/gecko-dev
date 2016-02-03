@@ -18,3 +18,10 @@ partial interface WorkerNavigator {
   readonly attribute MozI2cManager mozI2c;
 };
 #endif // MOZ_I2C_MANAGER
+
+#ifdef MOZ_GPIO_MANAGER
+partial interface WorkerNavigator {
+  [Throws]
+  readonly attribute MozGpioManager mozGpio;
+};
+#endif // MOZ_GPIO_MANAGER
