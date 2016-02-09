@@ -394,4 +394,15 @@ WorkerNavigator::GetUserAgent(nsString& aUserAgent) const
   }
 }
 
+#ifdef MOZ_I2C_MANAGER
+mozilla::dom::i2c::I2cManager*
+WorkerNavigator::GetMozI2c(ErrorResult& aRv)
+{
+  if (!mI2cManager) {
+    mI2cManager = new mozilla::dom::i2c::I2cManager();
+  }
+  return mI2cManager;
+}
+#endif
+
 END_WORKERS_NAMESPACE

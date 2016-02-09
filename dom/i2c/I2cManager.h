@@ -13,12 +13,10 @@
 namespace mozilla {
 namespace dom {
 
-//class Date;
-
 namespace i2c {
 
 class I2cManager final : public nsISupports
-                       , public nsWrapperCache
+                        , public nsWrapperCache
 {
 public:
   static bool PrefEnabled(JSContext* aCx, JSObject* aGlobal)
@@ -32,17 +30,11 @@ public:
 
   NS_DECL_CYCLE_COLLECTING_ISUPPORTS
   NS_DECL_CYCLE_COLLECTION_SCRIPT_HOLDER_CLASS(I2cManager)
-
-  explicit I2cManager(nsPIDOMWindow* aWindow)
-    : mWindow(aWindow)
+  
+  explicit I2cManager()
   {
   }
-
-  nsPIDOMWindow* GetParentObject() const
-  {
-    return mWindow;
-  }
-
+    
   JSObject* WrapObject(JSContext* aCx, JS::Handle<JSObject*> aGivenProto) override;
 
   void Open(uint8_t aDeviceNo);
@@ -50,10 +42,16 @@ public:
   void Write(uint8_t aDeviceNo, uint8_t aCommand, uint16_t aValue, bool aIsOctet);
   uint16_t Read(uint8_t aDeviceNo, uint8_t aCommand, bool aIsOctet);
 
+  nsISupports*
+  GetParentObject() const
+  {
+    // There's only one global on a worker, so we don't need to specify.
+    return nullptr;
+  }
+  
 private:
   ~I2cManager() {}
 
-  nsCOMPtr<nsPIDOMWindow> mWindow;
 };
 
 } // namespace i2c

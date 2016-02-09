@@ -11,3 +11,10 @@ WorkerNavigator implements NavigatorID;
 WorkerNavigator implements NavigatorLanguage;
 WorkerNavigator implements NavigatorOnLine;
 WorkerNavigator implements NavigatorDataStore;
+
+#ifdef MOZ_I2C_MANAGER
+partial interface WorkerNavigator {
+  [Throws]
+  readonly attribute MozI2cManager mozI2c;
+};
+#endif // MOZ_I2C_MANAGER

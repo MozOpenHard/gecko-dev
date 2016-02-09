@@ -22,6 +22,10 @@ class Promise;
 } // namespace dom
 } // namespace mozilla
 
+#ifdef MOZ_I2C_MANAGER
+#include "mozilla/dom/i2c/I2cManager.h"
+#endif
+
 BEGIN_WORKERS_NAMESPACE
 
 class WorkerNavigator final : public nsWrapperCache
@@ -112,6 +116,16 @@ public:
                                           const nsAString& aName,
                                           const nsAString& aOwner,
                                           ErrorResult& aRv);
+
+#ifdef MOZ_I2C_MANAGER
+  mozilla::dom::i2c::I2cManager* GetMozI2c(ErrorResult& aRv);
+#endif // MOZ_I2C_MANAGER
+
+private:
+#ifdef MOZ_I2C_MANAGER
+  RefPtr<mozilla::dom::i2c::I2cManager> mI2cManager;
+#endif
+
 };
 
 END_WORKERS_NAMESPACE

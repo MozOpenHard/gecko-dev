@@ -96,10 +96,6 @@
 #include "GpioManager.h"
 #endif
 
-#ifdef MOZ_I2C_MANAGER
-#include "I2cManager.h"
-#endif
-
 #ifdef MOZ_B2G_FM
 #include "mozilla/dom/FMRadio.h"
 #endif
@@ -217,9 +213,6 @@ NS_IMPL_CYCLE_COLLECTION_TRAVERSE_BEGIN(Navigator)
 #endif
 #ifdef MOZ_GPIO_MANAGER
   NS_IMPL_CYCLE_COLLECTION_TRAVERSE(mGpioManager)
-#endif
-#ifdef MOZ_I2C_MANAGER
-  NS_IMPL_CYCLE_COLLECTION_TRAVERSE(mI2cManager)
 #endif
   NS_IMPL_CYCLE_COLLECTION_TRAVERSE(mCameraManager)
   NS_IMPL_CYCLE_COLLECTION_TRAVERSE(mMediaDevices)
@@ -348,12 +341,6 @@ Navigator::Invalidate()
 #ifdef MOZ_GPIO_MANAGER
   if (mGpioManager) {
     mGpioManager = nullptr;
-  }
-#endif
-
-#ifdef MOZ_I2C_MANAGER
-  if (mI2cManager) {
-    mI2cManager = nullptr;
   }
 #endif
 
@@ -2155,23 +2142,6 @@ Navigator::GetMozGpio(ErrorResult& aRv)
   }
 
   return mGpioManager;
-}
-#endif
-
-#ifdef MOZ_I2C_MANAGER
-i2c::I2cManager*
-Navigator::GetMozI2c(ErrorResult& aRv)
-{
-  if (!mWindow) {
-    aRv.Throw(NS_ERROR_UNEXPECTED);
-    return nullptr;
-  }
-
-  if (!mI2cManager) {
-    mI2cManager = new i2c::I2cManager(mWindow);
-  }
-
-  return mI2cManager;
 }
 #endif
 

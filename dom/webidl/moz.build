@@ -13,6 +13,7 @@ PREPROCESSED_WEBIDL_FILES = [
     'Navigator.webidl',
     'ServiceWorkerRegistration.webidl',
     'Window.webidl',
+    'WorkerNavigator.webidl',
 ]
 
 WEBIDL_FILES = [
@@ -596,7 +597,6 @@ WEBIDL_FILES = [
     'WorkerDebuggerGlobalScope.webidl',
     'WorkerGlobalScope.webidl',
     'WorkerLocation.webidl',
-    'WorkerNavigator.webidl',
     'XMLDocument.webidl',
     'XMLHttpRequest.webidl',
     'XMLHttpRequestEventTarget.webidl',
