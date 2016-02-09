@@ -121,23 +121,23 @@ public:
                                           const nsAString& aOwner,
                                           ErrorResult& aRv);
 
-<<<<<<< HEAD
 #ifdef MOZ_I2C_MANAGER
   mozilla::dom::i2c::I2cManager* GetMozI2c(ErrorResult& aRv);
 #endif // MOZ_I2C_MANAGER
 
-private:
-#ifdef MOZ_I2C_MANAGER
-  RefPtr<mozilla::dom::i2c::I2cManager> mI2cManager;
-=======
 #ifdef MOZ_GPIO_MANAGER
   mozilla::dom::gpio::GpioManager* GetMozGpio(ErrorResult& aRv);
 #endif // MOZ_GPIO_MANAGER
 
+
+private:
+#ifdef MOZ_I2C_MANAGER
+  RefPtr<mozilla::dom::i2c::I2cManager> mI2cManager;
+#endif
+
 private:
 #ifdef MOZ_GPIO_MANAGER
   RefPtr<mozilla::dom::gpio::GpioManager> mGpioManager;
->>>>>>> implements gpio worker
 #endif
 
 };
