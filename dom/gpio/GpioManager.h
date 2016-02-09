@@ -13,8 +13,6 @@
 namespace mozilla {
 namespace dom {
 
-//class Date;
-
 namespace gpio {
 
 class GpioManager final : public nsISupports
@@ -33,14 +31,14 @@ public:
   NS_DECL_CYCLE_COLLECTING_ISUPPORTS
   NS_DECL_CYCLE_COLLECTION_SCRIPT_HOLDER_CLASS(GpioManager)
 
-  explicit GpioManager(nsPIDOMWindow* aWindow)
-    : mWindow(aWindow)
+  explicit GpioManager()
   {
   }
 
-  nsPIDOMWindow* GetParentObject() const
+  nsISupports*
+  GetParentObject() const
   {
-    return mWindow;
+    return nullptr;
   }
 
   JSObject* WrapObject(JSContext* aCx, JS::Handle<JSObject*> aGivenProto) override;
@@ -55,7 +53,6 @@ public:
 private:
   ~GpioManager() {}
 
-  nsCOMPtr<nsPIDOMWindow> mWindow;
 };
 
 } // namespace gpio

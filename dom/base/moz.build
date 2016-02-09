@@ -421,7 +421,6 @@ LOCAL_INCLUDES += [
     '../bluetooth/common',
     '../bluetooth/common/webapi',
     '../events',
-    '../gpio',
     '../media',
     '../network',
     '../time',

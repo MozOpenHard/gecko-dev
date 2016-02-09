@@ -16,15 +16,19 @@
 // WorkerNavigatorBinding.cpp
 #include "mozilla/dom/Navigator.h"
 
+#ifdef MOZ_GPIO_MANAGER
+#include "mozilla/dom/gpio/GpioManager.h"
+#endif
+
+#ifdef MOZ_I2C_MANAGER
+#include "mozilla/dom/i2c/I2cManager.h"
+#endif
+
 namespace mozilla {
 namespace dom {
 class Promise;
 } // namespace dom
 } // namespace mozilla
-
-#ifdef MOZ_I2C_MANAGER
-#include "mozilla/dom/i2c/I2cManager.h"
-#endif
 
 BEGIN_WORKERS_NAMESPACE
 
@@ -121,9 +125,19 @@ public:
   mozilla::dom::i2c::I2cManager* GetMozI2c(ErrorResult& aRv);
 #endif // MOZ_I2C_MANAGER
 
+#ifdef MOZ_GPIO_MANAGER
+  mozilla::dom::gpio::GpioManager* GetMozGpio(ErrorResult& aRv);
+#endif // MOZ_GPIO_MANAGER
+
+
 private:
 #ifdef MOZ_I2C_MANAGER
   RefPtr<mozilla::dom::i2c::I2cManager> mI2cManager;
+#endif
+
+private:
+#ifdef MOZ_GPIO_MANAGER
+  RefPtr<mozilla::dom::gpio::GpioManager> mGpioManager;
 #endif
 
 };

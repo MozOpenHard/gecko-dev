@@ -111,12 +111,6 @@ class AudioChannelManager;
 #endif
 } // namespace system
 
-#ifdef MOZ_GPIO_MANAGER
-namespace gpio {
-class GpioManager;
-} // namespace gpio
-#endif
-
 class Navigator final : public nsIDOMNavigator
                       , public nsIMozNavigatorNetwork
                       , public nsWrapperCache
@@ -282,9 +276,6 @@ public:
 #ifdef MOZ_AUDIO_CHANNEL_MANAGER
   system::AudioChannelManager* GetMozAudioChannelManager(ErrorResult& aRv);
 #endif // MOZ_AUDIO_CHANNEL_MANAGER
-#ifdef MOZ_GPIO_MANAGER
-  gpio::GpioManager* GetMozGpio(ErrorResult& aRv);
-#endif // MOZ_GPIO_MANAGER
 
   Presentation* GetPresentation(ErrorResult& aRv);
 
@@ -405,9 +396,7 @@ private:
 #ifdef MOZ_AUDIO_CHANNEL_MANAGER
   RefPtr<system::AudioChannelManager> mAudioChannelManager;
 #endif
-#ifdef MOZ_GPIO_MANAGER
-  RefPtr<gpio::GpioManager> mGpioManager;
-#endif
+
   RefPtr<nsDOMCameraManager> mCameraManager;
   RefPtr<MediaDevices> mMediaDevices;
   nsCOMPtr<nsIDOMNavigatorSystemMessages> mMessagesManager;

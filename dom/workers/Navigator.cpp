@@ -405,4 +405,15 @@ WorkerNavigator::GetMozI2c(ErrorResult& aRv)
 }
 #endif
 
+#ifdef MOZ_GPIO_MANAGER
+mozilla::dom::gpio::GpioManager*
+WorkerNavigator::GetMozGpio(ErrorResult& aRv)
+{
+  if (!mGpioManager) {
+     mGpioManager = new mozilla::dom::gpio::GpioManager();
+  }
+  return mGpioManager;
+}
+#endif
+
 END_WORKERS_NAMESPACE

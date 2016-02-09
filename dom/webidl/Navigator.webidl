@@ -380,14 +380,6 @@ partial interface Navigator {
 };
 #endif // MOZ_AUDIO_CHANNEL_MANAGER
 
-#ifdef MOZ_GPIO_MANAGER
-// nsIDOMMozNavigatorGpio
-partial interface Navigator {
-  [Throws]
-  readonly attribute MozGpioManager mozGpio;
-};
-#endif // MOZ_GPIO_MANAGER
-
 #ifdef MOZ_MEDIA_NAVIGATOR
 callback NavigatorUserMediaSuccessCallback = void (MediaStream stream);
 callback NavigatorUserMediaErrorCallback = void (MediaStreamError error);

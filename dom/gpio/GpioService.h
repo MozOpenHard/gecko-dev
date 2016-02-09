@@ -28,9 +28,9 @@ private:
 
   static StaticRefPtr<GpioService> sSingleton;
 
-  std::map<uint32_t, bool> map_direction;
-  std::map<uint32_t, FILE *> map_direction_fp;
-  std::map<uint32_t, FILE *> map_value_fp;
+  std::map<uint32_t, bool> mMapDirection;
+  std::map<uint32_t, FILE*> mMapDirectionFp;
+  std::map<uint32_t, FILE*> mMapValueFp;
 };
 
 } // namespace gpio
