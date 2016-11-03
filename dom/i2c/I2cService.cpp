@@ -94,7 +94,7 @@ I2cService::ReadWord(int aFile, uint8_t aCommand)
 }
 
 int32_t
-I2cService::WriteWord(int aFile, uint8_t aCommand, uint8_t aValue)
+I2cService::WriteWord(int aFile, uint8_t aCommand, uint16_t aValue)
 {
   union I2cValue value;
   value.word = aValue;
