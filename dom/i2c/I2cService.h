@@ -40,7 +40,7 @@ private:
   int32_t ReadByte(int aFile, uint8_t aCommand);
   int32_t WriteByte(int aFile, uint8_t aCommand, uint8_t aValue);
   int32_t ReadWord(int aFile, uint8_t aCommand);
-  int32_t WriteWord(int aFile, uint8_t aCommand, uint8_t aValue);
+  int32_t WriteWord(int aFile, uint8_t aCommand, uint16_t aValue);
 };
 
 } // namespace i2c
