@@ -121,6 +121,7 @@ I2cService::Open(uint8_t aDeviceNo) {
   }
 
   mFdMap[aDeviceNo] = fd;
+  mDeviceAddressMap[aDeviceNo] = 0xFF;
 
   return NS_OK;
 }
@@ -140,18 +141,28 @@ I2cService::SetDeviceAddress(uint8_t aDeviceNo, uint8_t aDeviceAddress) {
         aDeviceAddress, strerror(errno), errno);
     return NS_ERROR_FAILURE;
   }
+  mDeviceAddressMap[aDeviceNo] = aDeviceAddress;
 
   return NS_OK;
 }
 
 NS_IMETHODIMP
-I2cService::Write(uint8_t aDeviceNo, uint8_t aCommand, uint16_t aValue, bool aIsOctet) {
+I2cService::Write(uint8_t aDeviceNo, uint8_t aDeviceAddress, uint8_t aCommand, uint16_t aValue, bool aIsOctet) {
 
   LOG("i2c Write(%d,%d,%d) called\n", aDeviceNo, aCommand, aValue);
 
   if (mFdMap.find(aDeviceNo) == mFdMap.end()) {
     LOG("I2C device%d is not opened yet\n", aDeviceNo);
     return NS_ERROR_NOT_AVAILABLE;
+  }
+
+  if(aDeviceAddress != mDeviceAddressMap[aDeviceNo]){
+    if (ioctl(mFdMap[aDeviceNo], I2C_SLAVE, aDeviceAddress) < 0) {
+      LOG("%s: ioctl(I2C_SLAVE) for %02x failed: %s(%d)\n", __func__,
+        aDeviceAddress, strerror(errno), errno);
+      return NS_ERROR_FAILURE;
+    }
+    mDeviceAddressMap[aDeviceNo] = aDeviceAddress;
   }
 
   if (aIsOctet) {
@@ -172,13 +183,22 @@ I2cService::Write(uint8_t aDeviceNo, uint8_t aCommand, uint16_t aValue, bool aIs
 }
 
 NS_IMETHODIMP
-I2cService::Read(uint8_t aDeviceNo, uint8_t aCommand, bool aIsOctet, uint16_t *aValue) {
+I2cService::Read(uint8_t aDeviceNo, uint8_t aDeviceAddress, uint8_t aCommand, bool aIsOctet, uint16_t *aValue) {
 
   LOG("i2c Read(%d,%d,%d) called\n", aDeviceNo, aCommand, aIsOctet);
 
   if (mFdMap.find(aDeviceNo) == mFdMap.end()) {
     LOG("I2C device%d is not opened yet\n", aDeviceNo);
     return NS_ERROR_NOT_AVAILABLE;
+  }
+
+  if(aDeviceAddress != mDeviceAddressMap[aDeviceNo]){
+    if (ioctl(mFdMap[aDeviceNo], I2C_SLAVE, aDeviceAddress) < 0) {
+      LOG("%s: ioctl(I2C_SLAVE) for %02x failed: %s(%d)\n", __func__,
+        aDeviceAddress, strerror(errno), errno);
+      return NS_ERROR_FAILURE;
+    }
+    mDeviceAddressMap[aDeviceNo] = aDeviceAddress;
   }
 
   int32_t ret;
