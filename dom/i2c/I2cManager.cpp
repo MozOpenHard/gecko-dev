@@ -9,8 +9,6 @@
 #include "nsServiceManagerUtils.h"
 #include "nsError.h"
 
-//using mozilla::ErrorResult;
-
 namespace mozilla {
 namespace dom {
 namespace i2c {
