@@ -7,6 +7,7 @@
 #include "mozilla/dom/MozI2cManagerBinding.h"
 #include "nsII2cService.h"
 #include "nsServiceManagerUtils.h"
+#include "nsError.h"
 
 namespace mozilla {
 namespace dom {
@@ -41,44 +42,77 @@ I2cManager::WrapObject(JSContext* aCx, JS::Handle<JSObject*> aGivenProto)
 }
 
 void
-I2cManager::Open(uint8_t aDeviceNo)
+I2cManager::Open(uint8_t aDeviceNo, ErrorResult& aRv)
 {
+  nsresult aRes;
+
   nsCOMPtr<nsII2cService> i2cService = do_GetService(I2CSERVICE_CONTRACTID);
-  if (i2cService) {
-    i2cService->Open(aDeviceNo);
+  if (!i2cService) {
+    aRv.Throw(NS_ERROR_DOM_OPERATION_ERR);
+    return;
+  }
+
+  aRes = i2cService->Open(aDeviceNo);
+  if(aRes != NS_OK){
+    aRv.Throw(NS_ERROR_DOM_NOT_SUPPORTED_ERR);
   }
 }
 
 void
-I2cManager::SetDeviceAddress(uint8_t aDeviceNo, uint8_t aDeviceAddress)
+I2cManager::SetDeviceAddress(uint8_t aDeviceNo, uint8_t aDeviceAddress, ErrorResult& aRv)
 {
+  nsresult aRes;
+
   nsCOMPtr<nsII2cService> i2cService = do_GetService(I2CSERVICE_CONTRACTID);
-  if (i2cService) {
-    i2cService->SetDeviceAddress(aDeviceNo, aDeviceAddress);
+  if (!i2cService) {
+    aRv.Throw(NS_ERROR_DOM_OPERATION_ERR);
+    return;
+  }
+
+  aRes = i2cService->SetDeviceAddress(aDeviceNo, aDeviceAddress);
+  if(aRes != NS_OK){
+    aRv.Throw(NS_ERROR_DOM_NOT_SUPPORTED_ERR);
   }
 }
 
 void
-I2cManager::Write(uint8_t aDeviceNo, uint8_t aCommand, uint16_t aValue, bool aIsOctet)
+I2cManager::Write(uint8_t aDeviceNo, uint8_t aDeviceAddress, uint8_t aCommand, uint16_t aValue, bool aIsOctet, ErrorResult& aRv)
 {
+  nsresult aRes;
+
   nsCOMPtr<nsII2cService> i2cService = do_GetService(I2CSERVICE_CONTRACTID);
-  if (i2cService) {
-    i2cService->Write(aDeviceNo, aCommand, aValue, aIsOctet);
+  if (!i2cService) {
+    aRv.Throw(NS_ERROR_DOM_OPERATION_ERR);
+    return;
+  }
+
+  aRes = i2cService->Write(aDeviceNo, aDeviceAddress, aCommand, aValue, aIsOctet);
+  if(aRes != NS_OK){
+    aRv.Throw(NS_ERROR_DOM_INVALID_ACCESS_ERR);
   }
 }
 
 uint16_t
-I2cManager::Read(uint8_t aDeviceNo, uint8_t aCommand, bool aIsOctet)
+I2cManager::Read(uint8_t aDeviceNo, uint8_t aDeviceAddress, uint8_t aCommand, bool aIsOctet, ErrorResult& aRv)
 {
   uint16_t aValue;
+  nsresult aRes;
 
   nsCOMPtr<nsII2cService> i2cService = do_GetService(I2CSERVICE_CONTRACTID);
-  if (i2cService) {
-    i2cService->Read(aDeviceNo, aCommand, aIsOctet, &aValue);
-    return aValue;
+  if (!i2cService) {
+    aRv.Throw(NS_ERROR_DOM_OPERATION_ERR);
+    return 0xFFFF;
   }
-  return 12345;
+  
+  aRes = i2cService->Read(aDeviceNo, aDeviceAddress, aCommand, aIsOctet, &aValue);
+  if(aRes != NS_OK){
+    aRv.Throw(NS_ERROR_DOM_INVALID_ACCESS_ERR);
+    return 0xFFFF;
+  }
+  
+  return aValue;
 }
+
 
 } // namespace i2c
 } // namespace dom

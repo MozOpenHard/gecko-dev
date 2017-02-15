@@ -37,10 +37,10 @@ public:
     
   JSObject* WrapObject(JSContext* aCx, JS::Handle<JSObject*> aGivenProto) override;
 
-  void Open(uint8_t aDeviceNo);
-  void SetDeviceAddress(uint8_t aDeviceNo, uint8_t aDeviceAddress);
-  void Write(uint8_t aDeviceNo, uint8_t aCommand, uint16_t aValue, bool aIsOctet);
-  uint16_t Read(uint8_t aDeviceNo, uint8_t aCommand, bool aIsOctet);
+  void Open(uint8_t aDeviceNo, ErrorResult& aRv);
+  void SetDeviceAddress(uint8_t aDeviceNo, uint8_t aDeviceAddress, ErrorResult& aRv);
+  void Write(uint8_t aDeviceNo, uint8_t aDeviceAddress, uint8_t aCommand, uint16_t aValue, bool aIsOctet, ErrorResult& aRv);
+  uint16_t Read(uint8_t aDeviceNo, uint8_t aDeviceAddress, uint8_t aCommand, bool aIsOctet, ErrorResult& aRv);
 
   nsISupports*
   GetParentObject() const

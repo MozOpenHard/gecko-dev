@@ -34,6 +34,7 @@ private:
   static StaticRefPtr<I2cService> sSingleton;
 
   std::map<uint8_t, int> mFdMap;
+  std::map<uint8_t, uint8_t> mDeviceAddressMap;
 
   int32_t Execute(int aFile, char aReadWrite, uint8_t aCommand,
                            int aValueSize, union I2cValue* aValue);
